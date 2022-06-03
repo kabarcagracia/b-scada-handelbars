@@ -1,0 +1,436 @@
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        min-height: 350px;
+        width: 100%;
+      }
+
+    </style>
+    <style>
+              .contenedor {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  grid-template-rows: auto;
+                  justify-content: center;
+        
+                  justify-items: center;
+              }
+              .contenedor-1 {
+                
+                  grid-row: 1;
+                  grid-column: 1;
+              }
+              .contenedor-2 {
+                
+                  grid-row: 1;
+                  grid-column: 2;
+              }
+          </style>
+    <script>
+      // This example creates a 2-pixel-wide red polyline showing the path of
+      // the first trans-Pacific flight between Oakland, CA, and Brisbane,
+      // Australia which was made by Charles Kingsford Smith.
+      
+    </script>
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+    
+    <!-- BREADCRUMB -->
+    <div class="row mt-3 mx-0 mx-md-3">
+        <div class="col-12 rounded py-auto shadow-sm bg-body">
+            <nav aria-label="breadcrumb d-inline">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="/dashboard/d">MAQUINAS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">SEGUIMIENTO</li>
+                    <li class="breadcrumb-item active" aria-current="page">ID: {{id_machine}}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="row px-3 my-3 g-2">
+        <!-- DATOS PERSONALES DISPOSITIVO -->
+        <div class="col-12 col-sm-3 mb-3">
+                          <div class="card bg-dark text-white" >
+                              <img src="/images/machines/pexels-maarten-van-den-heuvel-2676842.jpg" class="card-img" alt="..." >
+                              <div class="card-img-overlay" style="background-color: rgba(0,0,0,0.5);">
+                                  <h5 class="card-title text-center" id="nombre_machine" style="text-transform: uppercase;">maquina</h5>
+                                  <p class="card-title text-center" id="nombre_device" style="text-transform: uppercase;">Dispositivo</p>
+                                  <hr class="mb-4">
+                                  <div class="card-text text-center mb-3" id="descripcion" style="text-transform: uppercase;">Descripcion</div>
+                                  <div class="card-text text-center mb-3"></div>
+                                  <div class="contenedor">
+                                      <div class="contenedor-1">
+                                          <div id="chart-77" class="mx-auto px-auto"></div>
+                                          <div class="card-text text-center">3 ANALOGAS</div>
+                                      </div>
+                                      <div class="contenedor-2">
+                                          <div id="chart-88"></div>
+                                          <div class="card-text text-center">1 DIGITALES</div>
+                                      </div>
+                                  </div>
+                                  <script>
+                                    var options77 = {
+                                        series: [45],
+                                        chart: {
+                                        type: 'radialBar',
+                                        width: 50,
+                                        height: 50,
+                                        sparkline: {
+                                          enabled: true
+                                        }
+                                      },
+                                      dataLabels: {
+                                        enabled: false
+                                      },
+                                      plotOptions: {
+                                        radialBar: {
+                                          hollow: {
+                                            margin: 0,
+                                            size: '50%'
+                                          },
+                                          track: {
+                                            margin: 0
+                                          },
+                                          dataLabels: {
+                                            show: false
+                                          }
+                                        }
+                                      }
+                                      };
+
+                                    var chart77 = new ApexCharts(document.querySelector("#chart-77"), options77);
+                                    chart77.render();
+
+                                    var options88 = {
+                                      series: [45],
+                                      chart: {
+                                      type: 'radialBar',
+                                      width: 50,
+                                      height: 50,
+                                      sparkline: {
+                                        enabled: true
+                                      }
+                                    },
+                                    dataLabels: {
+                                      enabled: false
+                                    },
+                                    plotOptions: {
+                                      radialBar: {
+                                        hollow: {
+                                          margin: 0,
+                                          size: '50%'
+                                        },
+                                        track: {
+                                          margin: 0
+                                        },
+                                        dataLabels: {
+                                          show: false
+                                        }
+                                      }
+                                    }
+                                    };
+
+                                    var chart88 = new ApexCharts(document.querySelector("#chart-88"), options88);
+                                    chart88.render();
+                                  </script>
+                                  <p class="card-text text-center mt-2"><small class="card-text " >Ultima actualización <b id="timeNow"></b></small></p>
+                                  <div class="text-center mt-4">
+                                      <button class="btn btn-danger" type="button" disabled>Ver datos dinamicos</button>
+                                      <button class="btn btn-danger" type="button" disabled>Ver historicos</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+        
+
+        <!-- MAPA GOOGLE -->
+        <div class="col-12 col-sm-9 rounded shadpw" style="height: 350px;">
+            <div class="card p-0">
+                <div class="card-body p-0">
+                    <div id="map"></div>
+                </div>
+            </div>            
+        </div>
+        <div class="col-12 col-sm-6" >
+            <div class="card" style="min-height: 300px;">
+                <h5 class="card-header">Grafico bateria y señal wi-fi <small class="text-muted float-end">ultimos 10 minutos</small></h5>
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
+            </div>
+        </div>
+    <div class="col-12 col-sm-6" >
+        <div class="card" style="min-height: 300px;">
+            <h5 class="card-header">Grafico Velocidad <small class="text-muted float-end">ultimos 10 minutos</small></h5>
+            <div class="card-body">
+                <div id="chart-temp"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDi_GipB4VPaAcH_U0YSvypCM5VqQv69x4&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+
+
+<script>
+    let map;
+
+    //inicializacion mapa
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { 
+                lat: 40.76, 
+                lng: -73.983 
+            },
+            zoom: 18,
+            mapTypeId: "hybrid",
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_CENTER,
+            },
+            zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER,
+            },
+            scaleControl: true,
+            streetViewControl: true,
+            streetViewControlOptions: {
+                position: google.maps.ControlPosition.LEFT_TOP,
+            },
+            fullscreenControl: true,
+        });
+        map.setTilt(45);
+
+    }
+
+    //peticion de maquinas con gps
+    axios({ 
+        
+        method: 'POST',   
+        url: 'http://34.225.63.84:3000/api/find_machinestracker', 
+        headers: {
+            Authorization: "Bearer Token"
+        }, 
+        data: { 
+            id: "34f3f4fef3f3ef",
+            id_machine: "60cd12b32a13dd3e8b7d7d10"
+        }
+    
+    }).then((res) => {
+        console.log(res.data)
+
+        document.getElementById('nombre_machine').innerHTML = res.data.data2[0].nombre;
+        document.getElementById('nombre_device').innerHTML = res.data.data[0].name;
+        document.getElementById('descripcion').innerHTML = res.data.data2[0].descripcion;
+        
+        axios({
+
+            method: 'POST',   
+            url: '{{url}}/api/find_datadevicetracker', 
+            headers: {
+                Authorization: "Bearer Token"
+            }, 
+            data: { 
+                name: 'factorb-iot-0018'
+            }
+            }).then((res) =>{
+
+                console.log(res.data)
+                let datos = res.data.data[0].data;
+                let info = [];
+                let trazar = [];
+                let data_wifi = [];
+                let data_battery = [];
+                let data_fechas = [];
+                let data_speed = [];
+
+                for(let d = 0 ; d < datos.length ; d ++) {
+                    info.push(
+                      {
+                        lat: datos[d].lat, 
+                        lng: datos[d].lng,
+                        bat: datos[d].bat,
+                        speed: datos[d].speed,
+                        wifi: datos[d].wifi,
+                        grade: datos[d].grade,
+                        time: new Date(datos[d].time)
+                      }
+                    );
+                }
+
+                //ordenar datos por tiempo de recepcion
+                let info_ordenado = info.sort((a, b) => a.time - b.time);
+                console.log(info_ordenado);
+
+
+                document.getElementById('timeNow').innerText = moment(info_ordenado[info_ordenado.length-1].time).fromNow();
+
+                for(let o = 0 ; o < info_ordenado.length ; o ++) {
+                  if(info_ordenado[o].lat != 0 || info_ordenado[o].lng != 0) {
+
+                      if(o > 1){
+                        let data;
+                        var R = 6372.795477598;
+                        
+                        var latA = trazar[trazar.length-1].lat;
+                        var lngA = trazar[trazar.length-1].lng;
+                          
+                        var latB = info_ordenado[o].lat;
+                        var lngB = info_ordenado[o].lng;
+                        data = R * Math.acos( ( Math.sin(latA) * Math.sin(latB) ) + ( Math.cos(latA) * Math.cos(latB) * Math.cos(lngA-lngB) ) );
+                        data = ((data * Math.PI)/180) * 1000;
+                        console.log(latB, " LAT");
+                        console.log(lngB, " LNG");
+                        console.log(data, " metros");
+
+                        // puntos entre dos metros
+
+                        if(data > 1 && data < 5000) {
+                          trazar.push({
+                              lat: info_ordenado[o].lat, 
+                              lng: info_ordenado[o].lng
+                          });
+
+                        }
+
+                      }
+                      else {
+                        trazar.push({
+                            lat: info_ordenado[o].lat, 
+                            lng: info_ordenado[o].lng
+                        });
+
+                      }
+                      
+
+                      
+
+
+                      //if(o >= info_ordenado.length){
+                          data_wifi.push(info_ordenado[o].wifi);
+                          data_battery.push(info_ordenado[o].bat);
+                          data_fechas.push(moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss'));
+                          data_speed.push({x: (moment(info_ordenado[o].time).subtract(4, 'hours').format('YYYY-MM-DD HH:mm:ss')), y: info_ordenado[o].speed});
+
+                      //}
+                  }
+                }
+
+              
+                //punto incio 
+                new google.maps.Marker({
+                  position: trazar[0],
+                  map,
+                  icon: "/images/start.png",
+                  title: "Punto Inicial",
+                });
+
+                //punto fin
+                new google.maps.Marker({
+                  position: trazar[trazar.length-1],
+                  map,
+                  title: "Punto Final",
+                });
+                // incluir traza a mapa
+                const flightPath = new google.maps.Polyline({
+                    path: trazar,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+                flightPath.setMap(map);
+
+                map.setCenter({lng: info_ordenado[info_ordenado.length-1].lng, lat: info_ordenado[info_ordenado.length-1].lat}, 10);    
+
+                // grafico bateria y wifi
+                var options = {
+                    series: [{
+                        name: 'Señal Wi-Fi [dbm]',
+                        data: data_wifi
+                    }, {
+                        name: 'Bateria [V]',
+                        data: data_battery
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'area'
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                      categories: data_fechas
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm:ss'
+                      },
+                    },
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+
+                var optionsTemp = {
+                    series: [{
+                        name: "Velocidad [km/h]",
+                        data: data_speed           
+                    }],
+                    chart: {
+                        type: 'area',
+                        height: 350,
+                        zoom: {
+                          enabled: false
+                        }
+                    },
+                    legend: {enabled: true},
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      type: 'datetime',
+                    },
+                    tooltip: {
+                      x: {
+                        format: 'dd/MM/yy HH:mm:ss'
+                      },
+                    },
+                    yaxis: {
+                      opposite: true
+                    },
+                    legend: {
+                      horizontalAlign: 'bottom'
+                    }
+                };
+
+                var chartTemp = new ApexCharts(document.querySelector("#chart-temp"), optionsTemp);
+                chartTemp.render();
+
+
+
+                
+                
+            }).catch((err) =>{
+                console.log(err);
+            });
+    }).catch((err) => {
+    
+        console.log(err);
+    });
+    
+</script>

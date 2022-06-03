@@ -1,0 +1,652 @@
+<link rel="stylesheet" href="/libs/cropperjs-master/dist/cropper.css">
+
+<div class="container-fluid m-0 p-0 h-auto" style="overflow-x: hidden;">
+
+    <!-- BREADCRUMB -->
+    <div class="row mt-3 mx-0 mx-md-3 bg-body shadow-sm">
+        <div class="col-12 rounded py-auto">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb my-3">
+                    <li class="breadcrumb-item"><a href="/dashboard">INICIO</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard/maquinas">MAQUINAS</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">AGREGAR MAQUINA</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row mt-3 mx-0 mx-md-3 px-5 d-flex justify-content-center">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active btn-lg" id="datosGenerales">Datos generales</button>
+                        </li>
+                        <li class="nav-item" role="presentation" >
+                            <button class="nav-link btn-lg" id="personalizacion">Personalización</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="container border bg-light">
+                                <div class="row py-5">
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="nameMachine" placeholder="name@example.com" onchange="nameMachine()">
+                                            <label for="floatingInput">Nombre de la maquina</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" placeholder="Leave a comment here" id="descriptionMachine" style="height: 100px" onchange="descriptionMachine()"></textarea>
+                                            <label for="floatingTextarea">Descripción</label>
+                                            <small class="text-muted" id="msj-dm"> maximo 50 caracteres</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="selectUser" style="height: 70px" aria-label="Floating label select example" onchange="selectUsers()">
+                                                
+                                    
+                                            </select>
+                                            <label for="selectUser">Asociar usuarios</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12" id="usuariosAsociados"></div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="region" aria-label="Floating label select example" style="height: 70px" onchange="region()">        
+                                            </select>
+                                            <label for="floatingSelect">region</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-select" id="comuna" style="height: 70px" aria-label="Floating label select example">
+                                            </select>
+                                            <label for="floatingSelect">comuna</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="d-grid" id="buttonNewMachine">
+                                            <button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>
+                                        </div>
+                                    </div>        
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="container border bg-light">
+                                <form action="/api/uploadfile" enctype="multipart/form-data" method="POST">
+                                    <div class="row py-5 d-flex d-row justify-content-center">
+                                        <div class="col-12 ">
+                                            <h3 class="text-uppercase text-center">asociar imagen a maquina</h3>
+                                            <p class="lead text-uppercase text-center">b-machine-0001</p>
+                                        </div>
+                                        <div class="col-12">
+                                            <img id="blah" src="" class="" style="max-width: 90%;">
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="">      
+                                                <input class="form-control" type="text" name="idMachine" id="idMachine" style="display: none;">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center mb-3">
+                                            <label class="label">
+                                                <img class="rounded" id="imgInicial" src="\images\machines\add.svg" alt="avatar" width="150px" height="150px">
+                                                <input type="file" class="sr-only" id="inputInicial" name="myFile" accept="image/*">
+                                            </label>
+                                            <!--<img id="blah" class="mx-auto" src="\images\machines\add.svg" alt="" width="150px" height="150px">-->    
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-grid" id="buttonNewMachine">
+                                                <button type="button" class="btn btn-primary" id="crop">Subir Imagen</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/libs/cropperjs-master/dist/cropper.js"></script>
+<script>
+    let avatar = document.getElementById('imgInicial');
+    let input = document.getElementById('inputInicial');
+    let nameFile = "";
+
+    
+    window.addEventListener('DOMContentLoaded', function () {
+        console.log("documento listo");
+      
+      let image = document.getElementById('blah');
+      
+      let cropper;
+
+      var filename = "";
+
+      input.addEventListener('change', function (e) {
+
+          var fullPath = document.getElementById('inputInicial').value;
+            if (fullPath) {
+                var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+                filename = fullPath.substring(startIndex);
+                if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+                    filename = filename.substring(1);
+                }
+                alert(filename);
+            }
+        var files = e.target.files;
+        console.log("files", files);
+        var done = function (url) {
+            console.log(input.file);
+          input.value = '';
+          image.src = url;
+          cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+          });
+        };
+        var reader;
+        var file;
+        var url;
+
+        if (files && files.length > 0) {
+          file = files[0];
+
+          if (URL) {
+            done(URL.createObjectURL(file));
+          } else if (FileReader) {
+            reader = new FileReader();
+            reader.onload = function (e) {
+              done(reader.result);
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+
+
+
+
+      document.getElementById('crop').addEventListener('click', function () {
+        var initialAvatarURL;
+        var canvas;
+
+    
+
+        if (cropper) {
+          canvas = cropper.getCroppedCanvas({
+            width: 250,
+            height: 250,
+          });
+          initialAvatarURL = avatar.src;
+          console.log(initialAvatarURL, avatar.src, input.value);
+          avatar.src = canvas.toDataURL();
+         
+       
+          canvas.toBlob(function (blob) {
+            var formData = new FormData();
+
+            formData.append('myFile', blob, filename);
+            
+            let aa = document.getElementById('idMachine').value;
+            
+            console.log(formData);
+            console.log(aa);
+            $.ajax('http://54.236.2.37:3000/api/uploadFile/'+aa, {
+              method: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+
+              xhr: function () {
+                var xhr = new XMLHttpRequest();
+                return xhr;
+              },
+
+              success: function () {
+                  window.location.href = "/dashboard/maquinas";
+              },
+
+              error: function () {
+                //avatar.src = initialAvatarURL;
+                //$alert.show().addClass('alert-warning').text('Upload error');
+              },
+
+              complete: function () {
+           
+              },
+            });
+          });
+        }
+      });
+    });
+
+
+    /*function readImage (input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result); // Renderizamos la imagen
+               
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }*/
+
+    /*$("#inputInicial").change(function () {
+        // Código a ejecutar cuando se detecta un cambio de archivO
+        readImage(this);
+    });*/
+    
+    
+    let objeto = [];
+    let selectUser = document.getElementById('selectUser');
+
+    let findUsers = [];
+    let dataUsers = `<option value='{"id": "", "nombre": ""}' selected>Seleccionar usuario</option>`;
+
+    axios({
+        method: 'POST',
+        url: '{{url}}/api/showUsers',
+        headers: {
+            Authorization: 'Bearer token'
+        },
+        data: {}
+    }).then((res) => {
+        console.log(res.data);
+
+        for(let i = 0 ; i < res.data.data.length ; i++) {
+            findUsers.push({id: res.data.data[i]._id, nombre: res.data.data[i].nombre + " " + res.data.data[i].apellidos, rol: res.data.data[i].rol});
+            dataUsers += `
+                <option value='{"id":"${res.data.data[i]._id}", "nombre": "${res.data.data[i].nombre + " " + res.data.data[i].apellidos}"}'>${res.data.data[i].nombre + " " + res.data.data[i].apellidos} - ${res.data.data[i].rol}</option>
+            `;
+        }
+
+        selectUser.innerHTML = dataUsers;
+
+
+    }).catch((err) =>{
+        console.log(err);
+    });
+    function deleteUser(id){
+        alert(id);
+        console.log(findUsers);
+
+
+        for(let a = 0 ; a < findUsers.length ; a ++) {
+            if(id == findUsers[a].id) {
+                //findUsers.push({""});
+            }
+        }
+
+    }
+  
+    function selectUsers() {
+        let users = `<div class="row mb-3">`;
+        let select = document.getElementById('selectUser');
+        let list = document.getElementById('usuariosAsociados');
+
+        let parseardata = JSON.parse(select.value);
+
+        console.log(findUsers);
+        if(parseardata.id != "") {
+            objeto.push(parseardata);
+
+            for(let z = 0 ; z < findUsers.length ; z ++) {
+                if(findUsers[z].id == parseardata.id) {
+                    console.log("comparacion", z,findUsers[z].id, parseardata.id);
+                    findUsers.splice(z, 1);
+                }
+            }
+            console.log("dentro for", findUsers);
+        }
+
+        console.log(findUsers);
+
+        for(let k = 0 ; k < objeto.length ; k ++) {
+            users += `
+                <div class="col-4 fs-4"><span class="badge rounded-pill bg-warning text-dark mx-auto">${objeto[k].nombre}
+                    <button type="button" class="btn btn-transparent m-0 p-0" onclick="deleteUser('${objeto[k].id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </button>
+                    </div>
+                </span>
+            `;
+        }
+        let arreglo = `<option value='{"id": "", "nombre": ""}' selected>Seleccionar usuario</option>`;
+
+        for(let z = 0 ; z < findUsers.length ; z ++) {
+            arreglo += `<option value='{"id":"${findUsers[z].id}", "nombre": "${findUsers[z].nombre}"}'>${findUsers[z].nombre} - ${findUsers[z].rol}</option>`;
+        }
+        selectUser.innerHTML = arreglo;
+        list.innerHTML = users + `</div>`;
+      
+
+  } 
+
+  function nameMachine() {
+      let name = document.getElementById('nameMachine');
+
+      if(name.value.length > 7) {
+            $("#nameMachine").addClass("is-valid");
+            $("#nameMachine").removeClass("is-invalid");
+            return true;
+      } else {
+            $("#nameMachine").addClass("is-invalid");
+            $("#nameMachine").removeClass("is-valid");
+            return false;
+      }
+  }
+  function descriptionMachine() {
+      let name = document.getElementById('descriptionMachine');
+      if(name.value.length == 0){
+          return true;
+
+      } else if(name.value.length < 50) {
+          $("#descriptionMachine").addClass("is-valid");
+          $("#descriptionMachine").removeClass("is-invalid"); 
+          return true;
+      } else {
+          $("#descriptionMachine").addClass("is-invalid");
+          $("#descriptionMachine").removeClass("is-valid");
+          return false;
+      }
+
+  }
+  let administracion;
+  axios({
+      method: 'POST',
+      url: '{{url}}/api/administracion'
+  }).then((res) => {
+    
+      console.log(res.data);
+      let regiones = document.getElementById('region');
+      let region = `<option value="0" selected>Seleccionar region</option>`;
+      administracion = res.data.regions;
+      for(let i = 0; i < res.data.regions.length; i++) {
+          region += `
+            <option value=${res.data.regions[i].number}>${res.data.regions[i].name}</option>
+          `;
+      }
+
+      regiones.innerHTML = region;
+   
+
+  }).catch((err) => {
+
+      console.log(err);
+  });
+
+  function region(){
+      let region = document.getElementById('region');
+      let comuna = document.getElementById('comuna');
+      console.log(region);
+      let comunas = `<option value="0" selected>Seleccionar Comuna</option>`;
+      if(region.value == 0){
+
+      } else {
+          for(let i = 0 ; i < administracion.length ; i ++){
+              if(region.value == administracion[i].number) {
+                  console.log(administracion[i].communes);
+                  for(j = 0 ; j < administracion[i].communes.length ; j++) {
+                      comunas += `<option value="${administracion[i].communes[j].name}">${administracion[i].communes[j].name}</option>`;
+                  }
+                  
+              }
+          }
+          comuna.innerHTML = comunas;
+      }
+  }
+
+  function newMachine(){
+      let button  = document.getElementById('buttonNewMachine');
+      let region = document.getElementById('region');
+      let comuna = document.getElementById('comuna');
+      let name = document.getElementById('nameMachine');
+      let description = document.getElementById('descriptionMachine');
+      let send = true;
+      
+      button.innerHTML = `
+          <button class="btn btn-primary btn-lg" type="button" disabled>
+              <span class="spinner-border spinner-border-md" role="status" aria-hidden="true"></span>
+              Creando nueva maquina
+          </button>`;
+
+      if(region.value != 0){
+          $("#region").addClass("is-valid");
+          $("#region").removeClass("is-invalid"); 
+      }
+      else {
+          $("#region").addClass("is-invalid");
+          $("#region").removeClass("is-valid");
+          send = false;
+
+      }
+
+      if(comuna.value != 0){
+          $("#comuna").addClass("is-valid");
+          $("#comuna").removeClass("is-invalid"); 
+      }
+      else {
+          $("#comuna").addClass("is-invalid");
+          $("#comuna").removeClass("is-valid");
+          send = false;
+
+      }
+
+      if(!nameMachine()) {
+          send = false;
+      }
+      if(!descriptionMachine()) {
+          send = false;
+      }
+      console.log(objeto);
+
+      let f = [];
+
+      for(l=0;l<objeto.length;l++) {
+          f.push(objeto[l].id);
+      }
+
+      console.log(f);
+
+
+      if(send) {
+          axios({
+              method: 'POST',
+              url: '{{url}}/api/createMachine',
+              headers: {
+                  Authorization: "Bearer Token"
+              },
+              data: { 
+                  nameMachine: name.value,
+                  descriptionMachine: description.value,
+                  location: comuna.value,
+                  usuarios_permitidos: f
+              }
+          }).then((res) => {
+    
+              console.log(res.data);
+              if(res.data.create) {
+                  button.innerHTML = `<button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>`;
+                  alert(res.data.id);
+                  document.getElementById('idMachine').value = res.data.id;
+                  $("#datosGenerales").removeClass("active");
+                  $("#personalizacion").addClass("active");
+                  $("#pills-home").removeClass("show active");
+                  $("#pills-profile").addClass("show active");
+                  //$("#region").removeClass("is-valid");
+
+              }
+
+          }).catch((err) => {
+
+              console.log(err);
+          });
+      } else {
+          button.innerHTML = `<button class="btn btn-primary" type="button" onclick="newMachine()">Crear maquina</button>`;
+      }
+  }
+
+
+
+
+
+
+
+
+
+
+  // File Upload
+// 
+function ekUpload(){
+  function Init() {
+
+    console.log("Upload Initialised");
+
+    var fileSelect    = document.getElementById('file-upload'),
+        fileDrag      = document.getElementById('file-drag'),
+        submitButton  = document.getElementById('submit-button');
+
+    fileSelect.addEventListener('change', fileSelectHandler, false);
+
+    // Is XHR2 available?
+    var xhr = new XMLHttpRequest();
+    if (xhr.upload) {
+      // File Drop
+      fileDrag.addEventListener('dragover', fileDragHover, false);
+      fileDrag.addEventListener('dragleave', fileDragHover, false);
+      fileDrag.addEventListener('drop', fileSelectHandler, false);
+    }
+  }
+
+  function fileDragHover(e) {
+    var fileDrag = document.getElementById('file-drag');
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    fileDrag.className = (e.type === 'dragover' ? 'hover' : 'modal-body file-upload');
+  }
+
+  function fileSelectHandler(e) {
+    // Fetch FileList object
+    var files = e.target.files || e.dataTransfer.files;
+
+    // Cancel event and hover styling
+    fileDragHover(e);
+
+    // Process all File objects
+    for (var i = 0, f; f = files[i]; i++) {
+      parseFile(f);
+      uploadFile(f);
+    }
+  }
+
+  // Output
+  function output(msg) {
+    // Response
+    var m = document.getElementById('messages');
+    m.innerHTML = msg;
+  }
+
+  function parseFile(file) {
+
+    console.log(file.name);
+    output(
+      '<strong>' + encodeURI(file.name) + '</strong>'
+    );
+    
+    // var fileType = file.type;
+    // console.log(fileType);
+    var imageName = file.name;
+
+    var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
+    if (isGood) {
+      document.getElementById('start').classList.add("hidden");
+      document.getElementById('response').classList.remove("hidden");
+      document.getElementById('notimage').classList.add("hidden");
+      // Thumbnail Preview
+      document.getElementById('file-image').classList.remove("hidden");
+      document.getElementById('file-image').src = URL.createObjectURL(file);
+    }
+    else {
+      document.getElementById('file-image').classList.add("hidden");
+      document.getElementById('notimage').classList.remove("hidden");
+      document.getElementById('start').classList.remove("hidden");
+      document.getElementById('response').classList.add("hidden");
+      document.getElementById("file-upload-form").reset();
+    }
+  }
+
+  function setProgressMaxValue(e) {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) {
+      pBar.max = e.total;
+    }
+  }
+
+  function updateFileProgress(e) {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) {
+      pBar.value = e.loaded;
+    }
+  }
+
+  function uploadFile(file) {
+
+    var xhr = new XMLHttpRequest(),
+      fileInput = document.getElementById('class-roster-file'),
+      pBar = document.getElementById('file-progress'),
+      fileSizeLimit = 1024; // In MB
+    if (xhr.upload) {
+      // Check if file is less than x MB
+      if (file.size <= fileSizeLimit * 1024 * 1024) {
+        // Progress bar
+        pBar.style.display = 'inline';
+        xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
+        xhr.upload.addEventListener('progress', updateFileProgress, false);
+
+        // File received / failed
+        xhr.onreadystatechange = function(e) {
+          if (xhr.readyState == 4) {
+            // Everything is good!
+
+            // progress.className = (xhr.status == 200 ? "success" : "failure");
+            // document.location.reload(true);
+          }
+        };
+
+        // Start upload
+        xhr.open('POST', document.getElementById('file-upload-form').action, true);
+        xhr.setRequestHeader('X-File-Name', file.name);
+        xhr.setRequestHeader('X-File-Size', file.size);
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(file);
+      } else {
+        output('Please upload a smaller file (< ' + fileSizeLimit + ' MB).');
+      }
+    }
+  }
+
+  // Check for the various File API support.
+  if (window.File && window.FileList && window.FileReader) {
+    Init();
+  } else {
+    document.getElementById('file-drag').style.display = 'none';
+  }
+}
+ekUpload();
+</script>
